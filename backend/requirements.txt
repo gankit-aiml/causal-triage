@@ -8,3 +8,4 @@ pandas
 scikit-learn
 pydantic
 httpx
+groq
