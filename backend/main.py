@@ -327,8 +327,10 @@ async def llm_stream(data: dict):
             
             yield "data: [DONE]\n\n"
         except Exception as e:
-            yield f"data: {json.dumps({'text': f'\\n\\n[Error communicating with Groq API: {str(e)}]' })}\n\n"
-            yield "data: [DONE]\n\n"
+            error_msg = f"\\n\\n[Error communicating with Groq API: {str(e)}]"
+            payload = json.dumps({"text": error_msg})
+            yield f"data: {payload}\\n\\n"
+            yield "data: [DONE]\\n\\n"
 
     return StreamingResponse(generate(), media_type="text/event-stream")
 
