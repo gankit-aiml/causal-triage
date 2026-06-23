@@ -30,7 +30,8 @@ export default function SimulationDashboard() {
       
       try {
         // 1. Geocode
-        const geoRes = await fetch(`http://localhost:8000/api/geocode?address=${encodeURIComponent(address)}`);
+        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
+        const geoRes = await fetch(`${backendUrl}/api/geocode?address=${encodeURIComponent(address)}`);
         const geoData = await geoRes.json();
         
         if (geoData && geoData.length > 0) {
@@ -42,8 +43,9 @@ export default function SimulationDashboard() {
         console.warn("Geocoding failed, falling back to default coordinates:", geoError);
       }
       
-      // 2. Call FastAPI simulate endpoint
-      const simReq = await fetch("http://localhost:8000/api/simulate", {
+      // 2. Fetch Simulation Data
+      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
+      const simReq = await fetch(`${backendUrl}/api/simulate`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -54,8 +56,8 @@ export default function SimulationDashboard() {
       const simData = await simReq.json();
       setSimResults(simData);
       
-      // 3. Start LLM Streaming
-      const llmReq = await fetch("http://localhost:8000/api/llm-stream", {
+      // 3. Stream LLM SOP Generation
+      const llmReq = await fetch(`${backendUrl}/api/llm-stream`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(simData)

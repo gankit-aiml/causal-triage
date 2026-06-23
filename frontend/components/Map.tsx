@@ -67,7 +67,8 @@ export default function Map({ center, affectedNodes, allNodes = [] }: MapProps) 
             // Fetch radial routes from origin to each affected node (Star Topology)
             const promises = affectedNodes.map(node => {
                 const coordString = `${center[1]},${center[0]};${node.lon},${node.lat}`;
-                return fetch(`http://localhost:8000/api/route`, {
+                const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
+                return fetch(`${backendUrl}/api/route`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ coordString })
