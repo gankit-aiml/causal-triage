@@ -312,7 +312,7 @@ async def llm_stream(data: dict):
     async def generate():
         try:
             stream = groq_client.chat.completions.create(
-                model="llama-3.1-8b-instant",
+                model="openai/gpt-oss-20b",
                 messages=[{"role": "system", "content": "You are a senior police tactical commander."}, {"role": "user", "content": prompt}],
                 stream=True,
                 temperature=0.3
